@@ -1,0 +1,180 @@
+/* IBM Plex Sans Arabic - Google Fonts Import */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap");
+
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@theme {
+  /* === Monochrome Color Palette === */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray-muted: #6b6b6b;
+  --color-gray-border: #d8d8d8;
+  --color-gray-light: #f2f2f2;
+
+  /* === Semantic Root (Maroon) === */
+  --color-root-primary: #6B2D3E;
+  --color-root-bg: #FFF7F9;
+  --color-root-soft: #F3E1E7;
+  --color-root-text: #481624;
+
+  /* === Semantic Family (Blue) === */
+  --color-family-primary: #315F85;
+  --color-family-bg: #F4F8FC;
+  --color-family-soft: #DCE8F2;
+  --color-family-text: #203F59;
+
+  /* === Semantic Spouse (Brown-Gold) === */
+  --color-spouse-primary: #93652F;
+  --color-spouse-bg: #FCF8F2;
+  --color-spouse-soft: #F0E3D1;
+  --color-spouse-text: #5B3B17;
+
+  /* === Semantic Active (Green) === */
+  --color-active-primary: #1F5B47;
+  --color-active-bg: #F2F9F5;
+  --color-active-soft: #DDEDE6;
+  --color-active-text: #143C2F;
+
+  /* === Semantic Unknown (Gray) === */
+  --color-unknown-primary: #6B7280;
+  --color-unknown-bg: #F8F9FA;
+  --color-unknown-soft: #E7E9EC;
+  --color-unknown-text: #374151;
+
+  /* === Global Text === */
+  --color-text-primary: #111111;
+  --color-text-secondary: #5F6368;
+  --color-text-muted: #7A7A7A;
+
+  /* === Connectors === */
+  --color-connector: #262626;
+
+  /* === shadcn/ui CSS Variables (monochrome) === */
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-primary: #000000;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f2f2f2;
+  --color-secondary-foreground: #000000;
+  --color-muted: #f2f2f2;
+  --color-muted-foreground: #6b6b6b;
+  --color-accent: #f2f2f2;
+  --color-accent-foreground: #000000;
+  --color-destructive: #000000;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #d8d8d8;
+  --color-input: #d8d8d8;
+  --color-ring: #000000;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #000000;
+
+  /* === shadcn/ui Radius === */
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 14px;
+  --radius-xl: 14px;
+
+  /* === Font Family === */
+  --font-sans: "IBM Plex Sans Arabic", Tahoma, sans-serif;
+
+  /* === Border Radius Tokens === */
+  --radius-card: 14px;
+  --radius-pill: 999px;
+
+  /* === Spacing Scale === */
+  --spacing-sibling: 16px;
+  --spacing-container: 12px;
+
+  /* === Font Size Tokens === */
+  --text-body: 12px;
+  --text-heading: 18px;
+}
+
+/* === shadcn/ui Animation Keyframes === */
+@keyframes animate-in {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(
+        var(--tw-enter-translate-x, 0),
+        var(--tw-enter-translate-y, 0),
+        0
+      )
+      scale3d(
+        var(--tw-enter-scale, 1),
+        var(--tw-enter-scale, 1),
+        var(--tw-enter-scale, 1)
+      )
+      rotate(var(--tw-enter-rotate, 0));
+  }
+}
+
+@keyframes animate-out {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(
+        var(--tw-exit-translate-x, 0),
+        var(--tw-exit-translate-y, 0),
+        0
+      )
+      scale3d(
+        var(--tw-exit-scale, 1),
+        var(--tw-exit-scale, 1),
+        var(--tw-exit-scale, 1)
+      )
+      rotate(var(--tw-exit-rotate, 0));
+  }
+}
+
+/* Base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === React Flow Edge Layer Stacking ===
+ * Ensure edges render between the canvas background and node foreground.
+ * Without this, node backgrounds can hide edges behind them.
+ */
+.react-flow__edges {
+  z-index: 1 !important;
+  pointer-events: none;
+}
+
+.react-flow__edge-path,
+.react-flow__edge path {
+  pointer-events: stroke;
+}
+
+.react-flow__nodes {
+  z-index: 2 !important;
+}
+
+/* Ensure the React Flow viewport container has valid dimensions */
+.react-flow__viewport {
+  overflow: visible;
+}
+
+/* Prevent union nodes from creating visual artifacts */
+.react-flow__node-union {
+  overflow: visible !important;
+}
+
