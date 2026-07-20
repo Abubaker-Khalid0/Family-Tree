@@ -59,7 +59,7 @@ export const FAMILY_DATA: FamilyData = {
       fatherId: "p001",
       motherId: null,
       spouses: [],
-      notes: "جد الزاكيب، عبدالله الزبير",
+      notes: "جد الزاكياب، عبدالله الزبير",
     },
     {
       id: "p004",
