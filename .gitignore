@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Admin dashboard (local only)
+admin.html
+admin-server.mjs
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
