@@ -1060,6 +1060,29 @@ function DetailsBody({
         </p>
       </div>
 
+      {/* زر إضافة للملاحظات — يرسل للداشبورد */}
+      <button
+        type="button"
+        onClick={() => {
+          const note = prompt('ملاحظة (اختياري):') || '';
+          fetch('http://localhost:3333/api/notes/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ personId: person.id, note }),
+          })
+            .then(r => {
+              if (!r.ok) throw new Error('Server error');
+              return r.json();
+            })
+            .then(d => { if (d.success) alert('✅ ' + d.message); else alert('❌ ' + (d.error || 'خطأ')); })
+            .catch(() => alert('❌ الداشبورد غير متصلة\nشغّل: node admin-server.mjs'));
+        }}
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-[12px] font-medium transition-colors hover:bg-neutral-50"
+        style={{ border: `1.5px solid ${CONNECTOR_COLORS.strongDivider}`, color: TEXT_COLORS.secondary }}
+      >
+        📋 إضافة للملاحظات
+      </button>
+
       {person.spouses && person.spouses.length > 0 && (
         <div className="mt-5">
           <p className="mb-2 text-[10.5px] uppercase tracking-[0.14em]" style={{ color: TEXT_COLORS.muted }}>
