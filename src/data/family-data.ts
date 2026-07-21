@@ -687,7 +687,7 @@ export const FAMILY_DATA: FamilyData = {
     // === أبناء عمر بن نعيم (من مها العتباني) ===
     { id: "p054", name: "ابوبكر", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p055", name: "عائشة", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
-    { id: "p056", name: "فاطمة", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [{ id: "s340", type: "linked", name: "", personId: "p063", label: "الزوج", childrenIds: [] }], notes: "" },
+    { id: "p056", name: "فاطمة", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [{ id: "s340", type: "linked", name: "", personId: "p063", label: "الزوج", childrenIds: ["p1173", "p1174", "p1175", "p1176"] }], notes: "" },
     { id: "p057", name: "محمد", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p058", name: "ليلى", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p059", name: "أحمد", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
@@ -696,7 +696,7 @@ export const FAMILY_DATA: FamilyData = {
 
     // === أبناء محمد بن نعيم (من فاطمة محمد بابكر) ===
     { id: "p062", name: "خالد", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
-    { id: "p063", name: "طارق", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [{ id: "s341", type: "linked", name: "", personId: "p056", label: "الزوجة", childrenIds: [] }], notes: "" },
+    { id: "p063", name: "طارق", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [{ id: "s341", type: "linked", name: "", personId: "p056", label: "الزوجة", childrenIds: ["p1173", "p1174", "p1175", "p1176"] }], notes: "" },
     { id: "p064", name: "أحمد", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
     { id: "p065", name: "تماضر", gender: "female", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
     { id: "p066", name: "خديجة", gender: "female", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
@@ -2162,5 +2162,9 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p1170", name: "محمد", gender: "male", relation: "", fatherId: "p1028", motherId: null, spouses: [], notes: "" },
     { id: "p1171", name: "زياد", gender: "male", relation: "", fatherId: null, motherId: "p1029", spouses: [], notes: "" },
     { id: "p1172", name: "اسماء", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
+    { id: "p1173", name: "محمد", gender: "male", relation: "", fatherId: "p063", motherId: "p056", spouses: [], notes: "" },
+    { id: "p1174", name: "ماجد", gender: "male", relation: "", fatherId: "p063", motherId: "p056", spouses: [], notes: "" },
+    { id: "p1175", name: "ليلى", gender: "female", relation: "", fatherId: "p063", motherId: "p056", spouses: [], notes: "" },
+    { id: "p1176", name: "عمر", gender: "male", relation: "", fatherId: "p063", motherId: "p056", spouses: [], notes: "" },
   ],
 };
