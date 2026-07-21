@@ -15,7 +15,7 @@ export const FAMILY_DATA: FamilyData = {
     // === الجيل الأول: الجد الأكبر ===
     {
       id: "p001",
-      name: "مضوي",
+      name: "مضوي أبوستة",
       gender: "male",
       relation: "الجد الأكبر",
       fatherId: null,
@@ -83,7 +83,7 @@ export const FAMILY_DATA: FamilyData = {
     },
     {
       id: "p006",
-      name: "ضياب",
+      name: "دياب",
       gender: "male",
       relation: "",
       fatherId: "p001",

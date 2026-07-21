@@ -15,7 +15,7 @@ export const FAMILY_DATA: FamilyData = {
     // === الجيل الأول: الجد الأكبر ===
     {
       id: "p001",
-      name: "مضوي",
+      name: "مضوي أبوستة",
       gender: "male",
       relation: "الجد الأكبر",
       fatherId: null,
@@ -83,7 +83,7 @@ export const FAMILY_DATA: FamilyData = {
     },
     {
       id: "p006",
-      name: "ضياب",
+      name: "دياب",
       gender: "male",
       relation: "",
       fatherId: "p001",
@@ -688,7 +688,7 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p054", name: "ابوبكر", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p055", name: "عائشة", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p056", name: "فاطمة", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [{ id: "s340", type: "linked", name: "", personId: "p063", label: "الزوج", childrenIds: ["p1173", "p1174", "p1175", "p1176"] }], notes: "" },
-    { id: "p057", name: "محمد", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [{ id: "s342", type: "external", name: "سلمى عادل", label: "الزوجة", childrenIds: ["p1178"] }], notes: "" },
+    { id: "p057", name: "محمد", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [{ id: "s342", type: "external", name: "سلمى عادل", label: "الزوجة", childrenIds: ["p1178", "p1179"] }], notes: "" },
     { id: "p058", name: "ليلى", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p059", name: "أحمد", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p060", name: "زينب", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [{ id: "s343", type: "external", name: "أنس رمضان", label: "الزوج", childrenIds: ["p1177"] }], notes: "" },
@@ -2168,5 +2168,6 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p1176", name: "عمر", gender: "male", relation: "", fatherId: "p063", motherId: "p056", spouses: [], notes: "" },
     { id: "p1177", name: "محمد", gender: "male", relation: "", fatherId: null, motherId: "p060", spouses: [], notes: "" },
     { id: "p1178", name: "عمر", gender: "male", relation: "", fatherId: "p057", motherId: null, spouses: [], notes: "" },
+    { id: "p1179", name: "عادل", gender: "male", relation: "", fatherId: "p057", motherId: null, spouses: [], notes: "" },
   ],
 };
