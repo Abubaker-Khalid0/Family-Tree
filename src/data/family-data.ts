@@ -131,7 +131,7 @@ export const FAMILY_DATA: FamilyData = {
         {
           id: "s004",
           type: "external",
-          name: "فاطمة بنت حمد الشريفية",
+          name: "زينب بنت حمد الشريفية",
           label: "الزوجة الثانية",
           childrenIds: ["p012", "p013", "p014", "p015", "p016", "p017", "p018", "p019", "p020", "p021"],
         },
