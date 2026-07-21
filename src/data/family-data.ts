@@ -542,7 +542,7 @@ export const FAMILY_DATA: FamilyData = {
           name: "",
           personId: "p978",
           label: "الزوجة الأولى",
-          childrenIds: ["p042", "p043", "p1065", "p1066"],
+          childrenIds: ["p042", "p043"],
         },
         {
           id: "s014",
@@ -585,7 +585,7 @@ export const FAMILY_DATA: FamilyData = {
           type: "external",
           name: "مها العتباني",
           label: "الزوجة",
-          childrenIds: ["p054", "p055", "p056", "p057", "p058", "p059", "p060", "p061"],
+          childrenIds: ["p054", "p055", "p056", "p057", "p058", "p059", "p060", "p061", "p1172"],
         },
       ],
       notes: "",
@@ -618,8 +618,9 @@ export const FAMILY_DATA: FamilyData = {
       spouses: [
         {
           id: "s018",
-          type: "external",
-          name: "عبدالمنعم بشير",
+          type: "linked",
+          name: "",
+          personId: "p602",
           label: "الزوج",
           childrenIds: ["p068", "p069", "p070", "p071"],
         },
@@ -686,7 +687,7 @@ export const FAMILY_DATA: FamilyData = {
     // === أبناء عمر بن نعيم (من مها العتباني) ===
     { id: "p054", name: "ابوبكر", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p055", name: "عائشة", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
-    { id: "p056", name: "فاطمة", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
+    { id: "p056", name: "فاطمة", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [{ id: "s340", type: "linked", name: "", personId: "p063", label: "الزوج", childrenIds: [] }], notes: "" },
     { id: "p057", name: "محمد", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p058", name: "ليلى", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
     { id: "p059", name: "أحمد", gender: "male", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
@@ -695,17 +696,17 @@ export const FAMILY_DATA: FamilyData = {
 
     // === أبناء محمد بن نعيم (من فاطمة محمد بابكر) ===
     { id: "p062", name: "خالد", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
-    { id: "p063", name: "طارق", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
+    { id: "p063", name: "طارق", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [{ id: "s341", type: "linked", name: "", personId: "p056", label: "الزوجة", childrenIds: [] }], notes: "" },
     { id: "p064", name: "أحمد", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
     { id: "p065", name: "تماضر", gender: "female", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
     { id: "p066", name: "خديجة", gender: "female", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
     { id: "p067", name: "نعيم", gender: "male", relation: "", fatherId: "p037", motherId: null, spouses: [], notes: "" },
 
-    // === أبناء خديجة (من عبدالمنعم بشير) ===
-    { id: "p068", name: "أحمد", gender: "male", relation: "", fatherId: null, motherId: "p038", spouses: [], notes: "" },
-    { id: "p069", name: "محمد", gender: "male", relation: "", fatherId: null, motherId: "p038", spouses: [], notes: "" },
-    { id: "p070", name: "سلوى", gender: "female", relation: "", fatherId: null, motherId: "p038", spouses: [], notes: "" },
-    { id: "p071", name: "سهير", gender: "female", relation: "", fatherId: null, motherId: "p038", spouses: [], notes: "" },
+    // === أبناء خديجة (من عبدالمنعم) ===
+    { id: "p068", name: "أحمد", gender: "male", relation: "", fatherId: "p602", motherId: "p038", spouses: [], notes: "" },
+    { id: "p069", name: "محمد", gender: "male", relation: "", fatherId: "p602", motherId: "p038", spouses: [], notes: "" },
+    { id: "p070", name: "سلوى", gender: "female", relation: "", fatherId: "p602", motherId: "p038", spouses: [], notes: "" },
+    { id: "p071", name: "سهير", gender: "female", relation: "", fatherId: "p602", motherId: "p038", spouses: [{ id: "s288", type: "linked", name: "", personId: "p077", label: "الزوج", childrenIds: ["p1032", "p1033", "p1034", "p1038"] }], notes: "" },
 
     // === أبناء نفيسة (من عبدالماجد) ===
     { id: "p072", name: "عفاف", gender: "female", relation: "", fatherId: "p975", motherId: "p039", spouses: [{ id: "s281", type: "linked", name: "", personId: "p1002", label: "الزوج", childrenIds: ["p1007", "p1008", "p1009", "p1010", "p1011"] }], notes: "" },
@@ -713,7 +714,7 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p074", name: "خالد", gender: "male", relation: "", fatherId: "p975", motherId: "p039", spouses: [{ id: "s282", type: "external", name: "إيمان", label: "الزوجة", childrenIds: [] }], notes: "" },
     { id: "p075", name: "كوثر", gender: "female", relation: "", fatherId: "p975", motherId: "p039", spouses: [{ id: "s287", type: "external", name: "محمد اللاسطى", label: "الزوج", childrenIds: ["p1026", "p1027", "p1028", "p1029", "p1030", "p1031"] }], notes: "" },
     { id: "p076", name: "محمد", gender: "male", relation: "", fatherId: "p975", motherId: "p039", spouses: [{ id: "s289", type: "external", name: "مشاعر", label: "الزوجة", childrenIds: ["p1035"] }], notes: "" },
-    { id: "p077", name: "أحمد", gender: "male", relation: "", fatherId: "p975", motherId: "p039", spouses: [{ id: "s288", type: "linked", name: "", personId: "p920", label: "الزوجة", childrenIds: ["p1032", "p1033", "p1034", "p1036", "p1037", "p1038", "p1039", "p1040"] }], notes: "" },
+    { id: "p077", name: "أحمد", gender: "male", relation: "", fatherId: "p975", motherId: "p039", spouses: [{ id: "s288", type: "linked", name: "", personId: "p071", label: "الزوجة", childrenIds: ["p1032", "p1033", "p1034", "p1038"] }], notes: "" },
     { id: "p078", name: "سيد أحمد", gender: "male", relation: "", fatherId: "p975", motherId: "p039", spouses: [], notes: "" },
 
     // === أبناء فاطمة (من عبدالماجد أبشر) ===
@@ -1883,7 +1884,7 @@ export const FAMILY_DATA: FamilyData = {
     // =====================================================================
     { id: "p600", name: "عبدالماجد", gender: "male", relation: "", fatherId: null, motherId: "p019", spouses: [{ id: "s260", type: "external", name: "حياة أحمد عوض الكريم", label: "الزوجة", childrenIds: ["p910", "p911", "p912", "p913"] }], notes: "" },
     { id: "p601", name: "خديجة", gender: "female", relation: "", fatherId: null, motherId: "p019", spouses: [{ id: "s261", type: "external", name: "عبدالماجد الباقر", label: "الزوج", childrenIds: ["p914", "p915", "p916", "p917"] }], notes: "" },
-    { id: "p602", name: "عبدالمنعم", gender: "male", relation: "", fatherId: null, motherId: "p019", spouses: [{ id: "s262", type: "external", name: "خديجة نعيم", label: "الزوجة", childrenIds: ["p918", "p919", "p920", "p921"] }], notes: "" },
+    { id: "p602", name: "عبدالمنعم", gender: "male", relation: "", fatherId: null, motherId: "p019", spouses: [{ id: "s262", type: "external", name: "خديجة نعيم", label: "الزوجة الأولى", childrenIds: ["p918", "p919", "p921"] }, { id: "s327", type: "linked", name: "", personId: "p038", label: "الزوجة الثانية", childrenIds: ["p068", "p069", "p070", "p071"] }], notes: "" },
     { id: "p603", name: "الرشيدية", gender: "female", relation: "", fatherId: null, motherId: "p019", spouses: [{ id: "s263", type: "external", name: "أحمد توفيق هبية", label: "الزوج", childrenIds: ["p922", "p923", "p924"] }], notes: "" },
     { id: "p604", name: "عبدالحي", gender: "male", relation: "", fatherId: null, motherId: "p019", spouses: [{ id: "s264", type: "external", name: "خديجة أحمد توفيق", label: "الزوجة", childrenIds: ["p925", "p926"] }], notes: "" },
     { id: "p605", name: "محمد", gender: "male", relation: "", fatherId: null, motherId: "p019", spouses: [{ id: "s265", type: "external", name: "آمنة أحمد توفيق", label: "الزوجة", childrenIds: ["p927", "p928"] }], notes: "" },
@@ -1904,7 +1905,6 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p917", name: "فاطمة", gender: "female", relation: "", fatherId: null, motherId: "p601", spouses: [], notes: "" },
     { id: "p918", name: "محمد", gender: "male", relation: "", fatherId: "p602", motherId: null, spouses: [], notes: "" },
     { id: "p919", name: "سلوى", gender: "female", relation: "", fatherId: "p602", motherId: null, spouses: [], notes: "" },
-    { id: "p920", name: "سهير", gender: "female", relation: "", fatherId: "p602", motherId: null, spouses: [{ id: "s288", type: "linked", name: "", personId: "p077", label: "الزوج", childrenIds: [] }], notes: "" },
     { id: "p921", name: "أحمد", gender: "male", relation: "", fatherId: "p602", motherId: null, spouses: [], notes: "" },
     { id: "p922", name: "حسن", gender: "male", relation: "", fatherId: null, motherId: "p603", spouses: [], notes: "" },
     { id: "p923", name: "عبدالوهاب", gender: "male", relation: "", fatherId: null, motherId: "p603", spouses: [], notes: "" },
@@ -1966,7 +1966,7 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p975", name: "عبدالماجد", gender: "male", relation: "", fatherId: null, motherId: "p631", spouses: [{ id: "s311", type: "linked", name: "", personId: "p039", label: "الزوجة", childrenIds: ["p072", "p073", "p074", "p075", "p076", "p077", "p078"] }], notes: "" },
     { id: "p976", name: "عبدالرحمن", gender: "male", relation: "", fatherId: null, motherId: "p631", spouses: [{ id: "s306", type: "linked", name: "", personId: "p971", label: "الزوجة", childrenIds: ["p1058", "p1059", "p1060", "p1061", "p1062", "p1067", "p1068"] }], notes: "" },
     { id: "p977", name: "العباس", gender: "male", relation: "", fatherId: null, motherId: "p631", spouses: [{ id: "s313", type: "linked", name: "", personId: "p081", label: "الزوجة", childrenIds: ["p1069", "p1070"] }], notes: "" },
-    { id: "p978", name: "رقية", gender: "female", relation: "", fatherId: null, motherId: "p631", spouses: [{ id: "s279", type: "linked", name: "", personId: "p034", label: "الزوج", childrenIds: ["p042", "p043", "p1065", "p1066"] }], notes: "" },
+    { id: "p978", name: "رقية", gender: "female", relation: "", fatherId: null, motherId: "p631", spouses: [{ id: "s279", type: "linked", name: "", personId: "p034", label: "الزوج", childrenIds: ["p042", "p043"] }], notes: "" },
     { id: "p979", name: "رابعة", gender: "female", relation: "", fatherId: null, motherId: "p631", spouses: [{ id: "s278", type: "external", name: "محمد احمد", label: "الزوج", childrenIds: ["p1001", "p1002", "p1003", "p1004", "p1005", "p1006"] }], notes: "" },
     { id: "p980", name: "وترية", gender: "female", relation: "", fatherId: null, motherId: "p631", spouses: [{ id: "s277", type: "external", name: "احمد عبد الهادي", label: "الزوج", childrenIds: ["p994", "p995", "p996", "p997", "p998", "p999", "p1000"] }], notes: "" },
     { id: "p981", name: "أسماء", gender: "female", relation: "", fatherId: null, motherId: "p631", spouses: [{ id: "s274", type: "external", name: "حسن عبد الهادي", label: "الزوج", childrenIds: ["p982", "p983", "p984", "p985", "p986", "p987", "p988", "p1113"] }], notes: "" },
@@ -1988,7 +1988,7 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p1002", name: "عباس", gender: "male", relation: "", fatherId: null, motherId: "p979", spouses: [{ id: "s281", type: "linked", name: "", personId: "p072", label: "الزوجة", childrenIds: ["p1007", "p1008", "p1009", "p1010", "p1011"] }], notes: "" },
     { id: "p1003", name: "حمزة", gender: "male", relation: "", fatherId: null, motherId: "p979", spouses: [{ id: "s325", type: "external", name: "امينة", label: "الزوجة", childrenIds: ["p1123", "p1124", "p1125", "p1126", "p1127", "p1128", "p1129"] }], notes: "" },
     { id: "p1004", name: "آمنة", gender: "female", relation: "", fatherId: null, motherId: "p979", spouses: [{ id: "s326", type: "external", name: "عبدالعزيز ابوقرين", label: "الزوج", childrenIds: ["p1130", "p1131", "p1132", "p1133", "p1134", "p1135", "p1136", "p1137", "p1138"] }], notes: "" },
-    { id: "p1005", name: "زينب", gender: "female", relation: "", fatherId: null, motherId: "p979", spouses: [{ id: "s327", type: "external", name: "عبدالجليل أبوقرين", label: "الزوج", childrenIds: ["p1139"] }], notes: "" },
+    { id: "p1005", name: "زينب", gender: "female", relation: "", fatherId: null, motherId: "p979", spouses: [{ id: "s340", type: "external", name: "عبدالجليل أبوقرين", label: "الزوج", childrenIds: ["p1139"] }], notes: "" },
     { id: "p1006", name: "خديجة", gender: "female", relation: "", fatherId: null, motherId: "p979", spouses: [{ id: "s328", type: "external", name: "عبدالرحمن أبوقرين", label: "الزوج", childrenIds: ["p1140", "p1141", "p1142", "p1143", "p1144"] }], notes: "" },
     { id: "p1007", name: "أحمد", gender: "male", relation: "", fatherId: "p1002", motherId: "p072", spouses: [], notes: "" },
     { id: "p1008", name: "منال", gender: "female", relation: "", fatherId: "p1002", motherId: "p072", spouses: [], notes: "" },
@@ -2015,15 +2015,11 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p1029", name: "آمنة", gender: "female", relation: "", fatherId: null, motherId: "p075", spouses: [{ id: "s339", type: "external", name: "خالد الامام", label: "الزوج", childrenIds: ["p1171"] }], notes: "" },
     { id: "p1030", name: "عبدالله", gender: "male", relation: "", fatherId: null, motherId: "p075", spouses: [], notes: "" },
     { id: "p1031", name: "محمود", gender: "male", relation: "", fatherId: null, motherId: "p075", spouses: [], notes: "" },
-    { id: "p1032", name: "فارس", gender: "male", relation: "", fatherId: "p077", motherId: "p920", spouses: [], notes: "" },
-    { id: "p1033", name: "نادر", gender: "male", relation: "", fatherId: "p077", motherId: "p920", spouses: [], notes: "" },
-    { id: "p1034", name: "لين", gender: "female", relation: "", fatherId: "p077", motherId: "p920", spouses: [], notes: "" },
+    { id: "p1032", name: "فارس", gender: "male", relation: "", fatherId: "p077", motherId: "p071", spouses: [], notes: "" },
+    { id: "p1033", name: "نادر", gender: "male", relation: "", fatherId: "p077", motherId: "p071", spouses: [], notes: "" },
+    { id: "p1034", name: "لين", gender: "female", relation: "", fatherId: "p077", motherId: "p071", spouses: [], notes: "" },
     { id: "p1035", name: "عبدالرحيم", gender: "male", relation: "", fatherId: "p076", motherId: null, spouses: [], notes: "" },
-    { id: "p1036", name: "فارس", gender: "male", relation: "", fatherId: "p077", motherId: "p920", spouses: [], notes: "" },
-    { id: "p1037", name: "نادر", gender: "male", relation: "", fatherId: "p077", motherId: "p920", spouses: [], notes: "" },
-    { id: "p1038", name: "محمد", gender: "male", relation: "", fatherId: "p077", motherId: "p920", spouses: [], notes: "" },
-    { id: "p1039", name: "لين", gender: "female", relation: "", fatherId: "p077", motherId: "p920", spouses: [], notes: "" },
-    { id: "p1040", name: "محمد", gender: "male", relation: "", fatherId: "p077", motherId: "p920", spouses: [], notes: "" },
+    { id: "p1038", name: "محمد", gender: "male", relation: "", fatherId: "p077", motherId: "p071", spouses: [], notes: "" },
     { id: "p1041", name: "نسرين", gender: "female", relation: "", fatherId: "p977", motherId: "p081", spouses: [], notes: "" },
     { id: "p1042", name: "نداء", gender: "female", relation: "", fatherId: "p977", motherId: "p081", spouses: [], notes: "" },
     { id: "p1043", name: "عبدالرحيم", gender: "male", relation: "", fatherId: "p977", motherId: "p081", spouses: [], notes: "" },
@@ -2165,5 +2161,6 @@ export const FAMILY_DATA: FamilyData = {
     { id: "p1169", name: "تميم", gender: "male", relation: "", fatherId: "p1027", motherId: null, spouses: [], notes: "" },
     { id: "p1170", name: "محمد", gender: "male", relation: "", fatherId: "p1028", motherId: null, spouses: [], notes: "" },
     { id: "p1171", name: "زياد", gender: "male", relation: "", fatherId: null, motherId: "p1029", spouses: [], notes: "" },
+    { id: "p1172", name: "اسماء", gender: "female", relation: "", fatherId: "p036", motherId: null, spouses: [], notes: "" },
   ],
 };
