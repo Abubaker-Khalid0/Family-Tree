@@ -1499,12 +1499,13 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log('');
   console.log('  ┌──────────────────────────────────────────┐');
   console.log('  │                                          │');
   console.log('  │   لوحة إدارة شجرة العائلة               │');
-  console.log(`  │   http://localhost:${PORT}                  │`);
+  console.log(`  │   محلي:  http://localhost:${PORT}           │`);
+  console.log(`  │   شبكة:  http://192.168.1.103:${PORT}      │`);
   console.log('  │                                          │');
   console.log('  │   اضغط Ctrl+C للإيقاف                   │');
   console.log('  │                                          │');
