@@ -2358,6 +2358,52 @@
       }
     }
 
+    // ─── Edit Spouse Label (التسمية) ────────────────────
+    function startEditSpouseLabel(spouseId) {
+      if (!selectedPerson) return;
+      const sp = selectedPerson.spouses.find(s => s.id === spouseId);
+      if (!sp) return;
+
+      const spName = sp.type === 'external' ? sp.name : getSpouseName(sp);
+      const div = document.getElementById('person-relations');
+      div.innerHTML = `
+        <div style="padding:12px;background:#f9f9f9;border-radius:var(--rs);border:1px solid #eee">
+          <div style="font-weight:600;font-size:.9rem;margin-bottom:10px">تغيير تسمية الزيجة — ${escapeOrderText(spName)}</div>
+          <div class="fg">
+            <label>التسمية الحالية</label>
+            <input type="text" id="edit-sp-label-input" value="${sp.label || ''}" dir="rtl" placeholder="مثال: الزوجة الأولى / الزوج الثاني">
+          </div>
+          <div style="font-size:.8rem;color:var(--txt2);margin-top:6px">أمثلة: الزوجة الأولى، الزوجة الثانية، الزوج، الزوج الأول...</div>
+          <div class="btn-row" style="margin-top:12px">
+            <button class="btn btn-blue btn-sm" onclick="submitEditSpouseLabel('${spouseId}')">حفظ</button>
+            <button class="btn btn-ghost btn-sm" onclick="buildRelationsView()">إلغاء</button>
+          </div>
+        </div>
+      `;
+      setTimeout(() => document.getElementById('edit-sp-label-input').focus(), 100);
+    }
+
+    async function submitEditSpouseLabel(spouseId) {
+      const label = document.getElementById('edit-sp-label-input').value.trim();
+      if (!label) return toast('التسمية مطلوبة', 'error');
+
+      try {
+        const resp = await fetch('/api/edit-spouse-label', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ personId: selectedPerson.id, spouseId, label }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) return toast(data.error, 'error');
+        toast(data.message, 'success');
+        await refreshData();
+        selectedPerson = allPeople.find(p => p.id === selectedPerson.id) || selectedPerson;
+        buildRelationsView();
+      } catch (e) {
+        toast('فشل الاتصال', 'error');
+      }
+    }
+
     // ─── Edit External Spouse ────────────────────────────
     function startEditSpouse(spouseId) {
       if (!selectedPerson) return;

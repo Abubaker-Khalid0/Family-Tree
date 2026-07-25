@@ -1448,6 +1448,43 @@ const server = createServer(async (req, res) => {
       });
     }
 
+    // ── POST /api/edit-spouse-label ──
+    if (url.pathname === '/api/edit-spouse-label' && req.method === 'POST') {
+      const b = await parseBody(req);
+      if (!b.personId) return json(res, 400, { error: 'الشخص مطلوب' });
+      if (!b.spouseId) return json(res, 400, { error: 'الزيجة مطلوبة' });
+      if (!b.label?.trim()) return json(res, 400, { error: 'التسمية مطلوبة' });
+
+      const data = readData();
+      const person = data.people.find(p => p.id === b.personId);
+      if (!person) return json(res, 400, { error: 'الشخص غير موجود' });
+      const sp = person.spouses.find(s => s.id === b.spouseId);
+      if (!sp) return json(res, 400, { error: 'الزيجة غير موجودة' });
+
+      const oldLabel = sp.label;
+      const newLabel = b.label.trim();
+
+      console.log(`  ✏ edit-spouse-label: "${oldLabel}" → "${newLabel}" (${b.spouseId})`);
+
+      safeOp((raw) => {
+        let pos = raw.indexOf(`id: "${b.spouseId}"`);
+        if (pos === -1) pos = raw.indexOf(`id:"${b.spouseId}"`);
+        if (pos === -1) throw new Error('Spouse not found in file');
+
+        const searchRegion = raw.substring(pos, pos + 400);
+        const labelMatch = searchRegion.match(/label:\s*"/);
+        if (!labelMatch) throw new Error('label field not found');
+        const labelStart = pos + labelMatch.index + labelMatch[0].length;
+        const labelEnd = raw.indexOf('"', labelStart);
+        return raw.slice(0, labelStart) + esc(newLabel) + raw.slice(labelEnd);
+      });
+
+      return json(res, 200, {
+        success: true,
+        message: `تم تغيير التسمية من "${oldLabel}" إلى "${newLabel}" بنجاح`,
+      });
+    }
+
     // ── POST /api/remove-child ──
     if (url.pathname === '/api/remove-child' && req.method === 'POST') {
       const b = await parseBody(req);
