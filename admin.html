@@ -999,9 +999,35 @@
 
     .order-spouse-card.dragging,
     .order-row.dragging {
-      opacity: .55;
+      opacity: .6;
       border-color: var(--blue);
-      box-shadow: 0 6px 18px rgba(30, 94, 168, .12)
+      box-shadow: 0 8px 24px rgba(30, 94, 168, .18);
+      transform: scale(1.02);
+      z-index: 100;
+      transition: opacity .15s, box-shadow .15s, transform .15s;
+    }
+
+    .order-spouse-card,
+    .order-row {
+      transition: transform .2s cubic-bezier(.4,0,.2,1), opacity .2s, box-shadow .2s;
+    }
+
+    .order-row.drag-over-top {
+      border-top: 2.5px solid var(--blue);
+      padding-top: 2px;
+    }
+
+    .order-row.drag-over-bottom {
+      border-bottom: 2.5px solid var(--blue);
+      padding-bottom: 2px;
+    }
+
+    .order-spouse-card.drag-over-top {
+      border-top: 3px solid var(--blue);
+    }
+
+    .order-spouse-card.drag-over-bottom {
+      border-bottom: 3px solid var(--blue);
     }
 
     .order-spouse-header {
@@ -2279,41 +2305,106 @@
       if (!item || !container) return;
 
       event.preventDefault();
-      activeOrderDrag = { handle, item, container, dragType, pointerId: event.pointerId };
+      event.stopPropagation();
+
+      // Store initial touch/pointer position
+      const startY = event.clientY;
+      const startX = event.clientX;
+      const itemRect = item.getBoundingClientRect();
+
+      activeOrderDrag = {
+        handle, item, container, dragType,
+        pointerId: event.pointerId,
+        startY, startX,
+        itemHeight: itemRect.height,
+        moved: false,
+        lastTarget: null,
+      };
+
+      // Visual feedback: scale up and shadow
       item.classList.add('dragging');
+
+      // Use document-level listeners (more reliable for touch)
+      document.addEventListener('pointermove', moveFamilyOrderDrag);
+      document.addEventListener('pointerup', finishFamilyOrderDrag);
+      document.addEventListener('pointercancel', finishFamilyOrderDrag);
+
+      // Capture pointer on the handle to prevent scrolling
       try { handle.setPointerCapture(event.pointerId); } catch {}
-      handle.addEventListener('pointermove', moveFamilyOrderDrag);
-      handle.addEventListener('pointerup', finishFamilyOrderDrag);
-      handle.addEventListener('pointercancel', finishFamilyOrderDrag);
     }
 
     function moveFamilyOrderDrag(event) {
-      if (!activeOrderDrag || event.pointerId !== activeOrderDrag.pointerId) return;
+      if (!activeOrderDrag) return;
       event.preventDefault();
+
+      const { item, container, dragType, lastTarget } = activeOrderDrag;
+      activeOrderDrag.moved = true;
+
+      // Release capture temporarily to allow elementFromPoint to work
+      try { activeOrderDrag.handle.releasePointerCapture(event.pointerId); } catch {}
+
+      // Hide the dragged item briefly to find element underneath
+      const origPointerEvents = item.style.pointerEvents;
+      item.style.pointerEvents = 'none';
       const underPointer = document.elementFromPoint(event.clientX, event.clientY);
+      item.style.pointerEvents = origPointerEvents;
+
+      // Re-capture
+      try { activeOrderDrag.handle.setPointerCapture(event.pointerId); } catch {}
+
       if (!underPointer) return;
-      const target = activeOrderDrag.dragType === 'spouse'
+
+      const target = dragType === 'spouse'
         ? underPointer.closest('.order-spouse-card')
         : underPointer.closest('.order-row');
-      if (!target || target === activeOrderDrag.item || target.parentElement !== activeOrderDrag.container) return;
 
+      // Clear previous indicators
+      if (lastTarget && lastTarget !== target) {
+        lastTarget.classList.remove('drag-over-top', 'drag-over-bottom');
+      }
+
+      if (!target || target === item || target.parentElement !== container) {
+        activeOrderDrag.lastTarget = null;
+        return;
+      }
+
+      // Determine insert position
       const rect = target.getBoundingClientRect();
-      const insertBeforeTarget = event.clientY < rect.top + rect.height / 2;
-      activeOrderDrag.container.insertBefore(
-        activeOrderDrag.item,
-        insertBeforeTarget ? target : target.nextSibling,
-      );
+      const midY = rect.top + rect.height / 2;
+      const insertBefore = event.clientY < midY;
+
+      // Show visual indicator
+      target.classList.remove('drag-over-top', 'drag-over-bottom');
+      target.classList.add(insertBefore ? 'drag-over-top' : 'drag-over-bottom');
+      activeOrderDrag.lastTarget = target;
     }
 
     function finishFamilyOrderDrag(event) {
-      if (!activeOrderDrag || event.pointerId !== activeOrderDrag.pointerId) return;
-      const { handle, item, container } = activeOrderDrag;
+      if (!activeOrderDrag) return;
+      const { handle, item, container, lastTarget, moved } = activeOrderDrag;
+
+      // Clear all visual indicators
       item.classList.remove('dragging');
-      handle.removeEventListener('pointermove', moveFamilyOrderDrag);
-      handle.removeEventListener('pointerup', finishFamilyOrderDrag);
-      handle.removeEventListener('pointercancel', finishFamilyOrderDrag);
+      container.querySelectorAll('.drag-over-top, .drag-over-bottom').forEach(el => {
+        el.classList.remove('drag-over-top', 'drag-over-bottom');
+      });
+
+      // Perform the actual DOM move if there's a valid target
+      if (moved && lastTarget && lastTarget !== item) {
+        const rect = lastTarget.getBoundingClientRect();
+        const insertBefore = event.clientY < rect.top + rect.height / 2;
+        container.insertBefore(item, insertBefore ? lastTarget : lastTarget.nextSibling);
+      }
+
+      // Cleanup listeners
+      document.removeEventListener('pointermove', moveFamilyOrderDrag);
+      document.removeEventListener('pointerup', finishFamilyOrderDrag);
+      document.removeEventListener('pointercancel', finishFamilyOrderDrag);
       try { handle.releasePointerCapture(event.pointerId); } catch {}
+
       activeOrderDrag = null;
+
+      // Sync state from DOM and re-render
       syncFamilyOrderFromDom(container);
       renderFamilyOrderContent();
     }

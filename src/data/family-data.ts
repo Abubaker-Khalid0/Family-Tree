@@ -127,7 +127,7 @@ export const FAMILY_DATA: FamilyData = {
       relation: "",
       fatherId: "p007",
       motherId: null,
-      spouses: [{ id: "s004", type: "external", name: "زينب بنت حمد الشريفية", label: "الزوجة الثانية", childrenIds: ["p012", "p013", "p014", "p015", "p016", "p017", "p018", "p019", "p020", "p021"] }, { id: "s005", type: "external", name: "فاطمة محمد دنبلاب", label: "الزوجة الاولى", childrenIds: ["p022", "p023", "p024"] }],
+      spouses: [{ id: "s005", type: "external", name: "فاطمة محمد دنبلاب", label: "الزوجة الاولى", childrenIds: ["p022", "p023", "p024"] }, { id: "s004", type: "external", name: "زينب بنت حمد الشريفية", label: "الزوجة الثانية", childrenIds: ["p012", "p014", "p013", "p016", "p015", "p019", "p018", "p020", "p021", "p017"] }],
       notes: "",
     },
     {
