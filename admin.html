@@ -972,6 +972,211 @@
       font-weight: 600
     }
 
+    /* ── Family ordering ── */
+    .family-order-help {
+      background: var(--blue-l);
+      border: 1px solid #bfd8f5;
+      border-radius: var(--rs);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      color: var(--blue-d);
+      font-size: .86rem;
+      line-height: 1.7
+    }
+
+    .order-spouse-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .order-spouse-card {
+      border: 1.5px solid var(--brd);
+      border-radius: var(--r);
+      background: var(--card);
+      overflow: hidden
+    }
+
+    .order-spouse-card.dragging,
+    .order-row.dragging {
+      opacity: .55;
+      border-color: var(--blue);
+      box-shadow: 0 6px 18px rgba(30, 94, 168, .12)
+    }
+
+    .order-spouse-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--brd)
+    }
+
+    .order-spouse-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .order-spouse-name {
+      font-size: .94rem;
+      font-weight: 700
+    }
+
+    .order-spouse-meta {
+      margin-top: 2px;
+      color: var(--txt3);
+      font-size: .78rem
+    }
+
+    .order-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0
+    }
+
+    .order-icon-btn,
+    .drag-handle {
+      width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--brd);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--txt2);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: .92rem
+    }
+
+    .order-icon-btn:hover:not(:disabled),
+    .drag-handle:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: var(--blue-l)
+    }
+
+    .order-icon-btn:disabled {
+      opacity: .3;
+      cursor: not-allowed
+    }
+
+    .drag-handle {
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      font-size: 1.05rem
+    }
+
+    .drag-handle:active {
+      cursor: grabbing
+    }
+
+    .order-spouse-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 14px
+    }
+
+    .order-group {
+      min-width: 0
+    }
+
+    .order-group-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--txt2)
+    }
+
+    .order-group-count {
+      color: var(--txt3);
+      font-size: .76rem;
+      font-weight: 500
+    }
+
+    .order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 36px
+    }
+
+    .order-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: #fff;
+      border: 1px solid var(--brd);
+      border-radius: var(--rs)
+    }
+
+    .order-index {
+      width: 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--blue-l);
+      color: var(--blue-d);
+      font-size: .75rem;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .order-child-name {
+      flex: 1;
+      min-width: 0;
+      font-size: .88rem;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .order-empty {
+      border: 1px dashed var(--brd);
+      border-radius: var(--rs);
+      padding: 10px;
+      color: var(--txt3);
+      font-size: .8rem;
+      text-align: center
+    }
+
+    .order-save-bar {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 12px;
+      background: linear-gradient(to top, var(--bg) 78%, transparent)
+    }
+
+    @media(max-width:700px) {
+      .order-spouse-body {
+        grid-template-columns: 1fr
+      }
+
+      .order-spouse-header {
+        align-items: flex-start;
+        flex-wrap: wrap
+      }
+
+      .order-controls {
+        width: 100%;
+        justify-content: flex-end
+      }
+    }
+
     .spouse-list-item {
       display: flex;
       align-items: center;
@@ -1179,6 +1384,10 @@
             <div class="ab-title">زوج أو زوجة</div>
             <div class="ab-sub">إضافة علاقة زواج</div>
           </div>
+          <div class="action-btn" id="family-order-action" onclick="startFamilyOrder()" style="display:none">
+            <div class="ab-title">ترتيب الأسرة</div>
+            <div class="ab-sub">ترتيب الزوجات والأبناء والبنات</div>
+          </div>
         </div>
 
         <!-- Danger zone -->
@@ -1189,6 +1398,24 @@
               onclick="startDelete()">حذف هذا الشخص</button>
             <div id="person-relations" style="margin-top:12px"></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ SCREEN: FAMILY ORDER ═══════ -->
+    <div class="screen" id="screen-family-order">
+      <div class="section">
+        <button class="btn-link" onclick="cancelFamilyOrder()" style="margin-bottom:10px">→ رجوع</button>
+        <div class="section-title">ترتيب الأسرة</div>
+        <div class="section-sub" id="family-order-person"></div>
+        <div class="family-order-help">
+          رتّب الزوجات من الأولى إلى الأخيرة. داخل كل زيجة رتّب الأبناء من الأكبر إلى الأصغر،
+          ثم البنات من الكبرى إلى الصغرى. سيظهر أول اسم في أقصى اليمين داخل الشجرة.
+        </div>
+        <div id="family-order-content"></div>
+        <div class="order-save-bar">
+          <button class="btn btn-primary" id="family-order-save" onclick="saveFamilyOrder()">حفظ الترتيب</button>
+          <button class="btn btn-ghost" onclick="cancelFamilyOrder()">إلغاء</button>
         </div>
       </div>
     </div>
@@ -1383,6 +1610,8 @@
     let childRowCounter = 0;
     let _confirmCallback = null; // confirmation modal callback
     let _personCache = null;     // precomputed person context cache
+    let familyOrderDraft = null;
+    let activeOrderDrag = null;
 
     // ─── Init ───────────────────────────────────────────
     async function init() {
@@ -1766,6 +1995,10 @@
       // Build relations in danger section
       buildRelationsView();
 
+      const familyOrderAction = document.getElementById('family-order-action');
+      const canOrderFamily = selectedPerson.spouses.length > 1 || countChildren(selectedPerson) > 0;
+      familyOrderAction.style.display = canOrderFamily ? '' : 'none';
+
       document.getElementById('danger-content').classList.remove('open');
       showScreen('person');
     }
@@ -1862,6 +2095,267 @@
         });
       }
       div.innerHTML = html;
+    }
+
+    // ─── Family ordering ─────────────────────────────────
+    function escapeOrderText(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function createFamilyOrderDraft(person) {
+      return person.spouses.map(spouse => {
+        const children = spouse.childrenIds
+          .map(id => allPeople.find(personItem => personItem.id === id))
+          .filter(Boolean);
+        return {
+          ...spouse,
+          displayName: getSpouseName(spouse),
+          sons: children.filter(child => child.gender === 'male').map(child => child.id),
+          daughters: children.filter(child => child.gender === 'female').map(child => child.id),
+        };
+      });
+    }
+
+    async function startFamilyOrder() {
+      if (!selectedPerson) return;
+      // تحديث البيانات قبل بدء الترتيب لتجنب التضارب
+      await refreshData();
+      selectedPerson = allPeople.find(person => person.id === selectedPerson.id) || selectedPerson;
+      familyOrderDraft = createFamilyOrderDraft(selectedPerson);
+      document.getElementById('family-order-person').textContent = `أسرة ${selectedPerson.name}`;
+      renderFamilyOrderContent();
+      showScreen('family-order');
+    }
+
+    function cancelFamilyOrder() {
+      familyOrderDraft = null;
+      activeOrderDrag = null;
+      showPersonScreen();
+    }
+
+    function renderOrderRows(spouseId, gender, ids) {
+      if (ids.length === 0) {
+        return '<div class="order-empty">لا توجد أسماء في هذه المجموعة</div>';
+      }
+      return ids.map((childId, index) => {
+        const child = allPeople.find(person => person.id === childId);
+        const childName = child ? child.name : childId;
+        return `
+          <div class="order-row" data-child-id="${childId}">
+            <button type="button" class="drag-handle" data-drag-type="child"
+              aria-label="سحب ${escapeOrderText(childName)} لتغيير ترتيبه" title="اسحب لتغيير الترتيب">⋮⋮</button>
+            <span class="order-index">${index + 1}</span>
+            <span class="order-child-name">${escapeOrderText(childName)}</span>
+            <div class="order-controls">
+              <button type="button" class="order-icon-btn" ${index === 0 ? 'disabled' : ''}
+                onclick="moveFamilyChild('${spouseId}','${gender}','${childId}',-1)"
+                aria-label="تحريك ${escapeOrderText(childName)} للأعلى" title="أكبر">↑</button>
+              <button type="button" class="order-icon-btn" ${index === ids.length - 1 ? 'disabled' : ''}
+                onclick="moveFamilyChild('${spouseId}','${gender}','${childId}',1)"
+                aria-label="تحريك ${escapeOrderText(childName)} للأسفل" title="أصغر">↓</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderFamilyOrderContent() {
+      const content = document.getElementById('family-order-content');
+      if (!familyOrderDraft || familyOrderDraft.length === 0) {
+        content.innerHTML = '<div class="order-empty">لا توجد زيجات مسجلة لهذا الشخص</div>';
+        return;
+      }
+
+      content.innerHTML = `
+        <div class="order-spouse-list">
+          ${familyOrderDraft.map((spouse, index) => `
+            <div class="order-spouse-card" data-spouse-id="${spouse.id}">
+              <div class="order-spouse-header">
+                <button type="button" class="drag-handle" data-drag-type="spouse"
+                  aria-label="سحب ${escapeOrderText(spouse.displayName)} لتغيير ترتيب الزيجات"
+                  title="اسحب لتغيير ترتيب الزيجات">⋮⋮</button>
+                <div class="order-spouse-info">
+                  <div class="order-spouse-name">${escapeOrderText(spouse.displayName)}</div>
+                  <div class="order-spouse-meta">
+                    الزيجة ${index + 1} · ${escapeOrderText(spouse.label)} · ${index === 0 ? 'تظهر أولاً جهة اليمين' : `تظهر بعد الزيجة ${index}`}
+                  </div>
+                </div>
+                <div class="order-controls">
+                  <button type="button" class="order-icon-btn" ${index === 0 ? 'disabled' : ''}
+                    onclick="moveFamilySpouse('${spouse.id}',-1)"
+                    aria-label="تحريك الزيجة نحو اليمين" title="نحو اليمين">→</button>
+                  <button type="button" class="order-icon-btn" ${index === familyOrderDraft.length - 1 ? 'disabled' : ''}
+                    onclick="moveFamilySpouse('${spouse.id}',1)"
+                    aria-label="تحريك الزيجة نحو اليسار" title="نحو اليسار">←</button>
+                </div>
+              </div>
+              <div class="order-spouse-body">
+                <div class="order-group">
+                  <div class="order-group-title">
+                    <span>الأبناء — الأكبر أولاً</span>
+                    <span class="order-group-count">${spouse.sons.length} أسماء</span>
+                  </div>
+                  <div class="order-list" data-spouse-id="${spouse.id}" data-gender="sons">
+                    ${renderOrderRows(spouse.id, 'sons', spouse.sons)}
+                  </div>
+                </div>
+                <div class="order-group">
+                  <div class="order-group-title">
+                    <span>البنات — الكبرى أولاً</span>
+                    <span class="order-group-count">${spouse.daughters.length} أسماء</span>
+                  </div>
+                  <div class="order-list" data-spouse-id="${spouse.id}" data-gender="daughters">
+                    ${renderOrderRows(spouse.id, 'daughters', spouse.daughters)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      content.querySelectorAll('.drag-handle').forEach(handle => {
+        handle.addEventListener('pointerdown', beginFamilyOrderDrag);
+      });
+    }
+
+    function moveFamilySpouse(spouseId, direction) {
+      if (!familyOrderDraft) return;
+      const index = familyOrderDraft.findIndex(spouse => spouse.id === spouseId);
+      const target = index + direction;
+      if (index < 0 || target < 0 || target >= familyOrderDraft.length) return;
+      [familyOrderDraft[index], familyOrderDraft[target]] =
+        [familyOrderDraft[target], familyOrderDraft[index]];
+      renderFamilyOrderContent();
+    }
+
+    function moveFamilyChild(spouseId, gender, childId, direction) {
+      if (!familyOrderDraft || !['sons', 'daughters'].includes(gender)) return;
+      const spouse = familyOrderDraft.find(item => item.id === spouseId);
+      if (!spouse) return;
+      const ids = spouse[gender];
+      const index = ids.indexOf(childId);
+      const target = index + direction;
+      if (index < 0 || target < 0 || target >= ids.length) return;
+      [ids[index], ids[target]] = [ids[target], ids[index]];
+      renderFamilyOrderContent();
+    }
+
+    function syncFamilyOrderFromDom(container) {
+      if (!familyOrderDraft) return;
+      if (container.classList.contains('order-spouse-list')) {
+        const ids = Array.from(container.children)
+          .filter(element => element.classList.contains('order-spouse-card'))
+          .map(element => element.dataset.spouseId);
+        familyOrderDraft = ids
+          .map(id => familyOrderDraft.find(spouse => spouse.id === id))
+          .filter(Boolean);
+        return;
+      }
+
+      if (container.classList.contains('order-list')) {
+        const spouse = familyOrderDraft.find(item => item.id === container.dataset.spouseId);
+        const gender = container.dataset.gender;
+        if (!spouse || !['sons', 'daughters'].includes(gender)) return;
+        spouse[gender] = Array.from(container.children)
+          .filter(element => element.classList.contains('order-row'))
+          .map(element => element.dataset.childId);
+      }
+    }
+
+    function beginFamilyOrderDrag(event) {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      const handle = event.currentTarget;
+      const dragType = handle.dataset.dragType;
+      const item = dragType === 'spouse'
+        ? handle.closest('.order-spouse-card')
+        : handle.closest('.order-row');
+      const container = item?.parentElement;
+      if (!item || !container) return;
+
+      event.preventDefault();
+      activeOrderDrag = { handle, item, container, dragType, pointerId: event.pointerId };
+      item.classList.add('dragging');
+      try { handle.setPointerCapture(event.pointerId); } catch {}
+      handle.addEventListener('pointermove', moveFamilyOrderDrag);
+      handle.addEventListener('pointerup', finishFamilyOrderDrag);
+      handle.addEventListener('pointercancel', finishFamilyOrderDrag);
+    }
+
+    function moveFamilyOrderDrag(event) {
+      if (!activeOrderDrag || event.pointerId !== activeOrderDrag.pointerId) return;
+      event.preventDefault();
+      const underPointer = document.elementFromPoint(event.clientX, event.clientY);
+      if (!underPointer) return;
+      const target = activeOrderDrag.dragType === 'spouse'
+        ? underPointer.closest('.order-spouse-card')
+        : underPointer.closest('.order-row');
+      if (!target || target === activeOrderDrag.item || target.parentElement !== activeOrderDrag.container) return;
+
+      const rect = target.getBoundingClientRect();
+      const insertBeforeTarget = event.clientY < rect.top + rect.height / 2;
+      activeOrderDrag.container.insertBefore(
+        activeOrderDrag.item,
+        insertBeforeTarget ? target : target.nextSibling,
+      );
+    }
+
+    function finishFamilyOrderDrag(event) {
+      if (!activeOrderDrag || event.pointerId !== activeOrderDrag.pointerId) return;
+      const { handle, item, container } = activeOrderDrag;
+      item.classList.remove('dragging');
+      handle.removeEventListener('pointermove', moveFamilyOrderDrag);
+      handle.removeEventListener('pointerup', finishFamilyOrderDrag);
+      handle.removeEventListener('pointercancel', finishFamilyOrderDrag);
+      try { handle.releasePointerCapture(event.pointerId); } catch {}
+      activeOrderDrag = null;
+      syncFamilyOrderFromDom(container);
+      renderFamilyOrderContent();
+    }
+
+    async function saveFamilyOrder() {
+      if (!selectedPerson || !familyOrderDraft) return;
+      const saveButton = document.getElementById('family-order-save');
+      saveButton.disabled = true;
+      saveButton.textContent = 'جاري الحفظ...';
+
+      const payload = {
+        personId: selectedPerson.id,
+        spouseOrder: familyOrderDraft.map(spouse => spouse.id),
+        childrenOrderBySpouse: familyOrderDraft.map(spouse => ({
+          spouseId: spouse.id,
+          sons: [...spouse.sons],
+          daughters: [...spouse.daughters],
+        })),
+      };
+
+      try {
+        const response = await fetch('/api/reorder-family', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          toast(result.error || 'تعذر حفظ الترتيب', 'error');
+          return;
+        }
+        await refreshData();
+        selectedPerson = allPeople.find(person => person.id === selectedPerson.id) || selectedPerson;
+        familyOrderDraft = null;
+        toast(result.message, 'success');
+        showPersonScreen();
+      } catch {
+        toast('فشل الاتصال أثناء حفظ الترتيب', 'error');
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = 'حفظ الترتيب';
+      }
     }
 
     // ─── Edit External Spouse ────────────────────────────

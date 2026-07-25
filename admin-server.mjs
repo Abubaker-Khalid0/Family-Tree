@@ -15,7 +15,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_FILE = join(__dirname, 'src', 'data', 'family-data.ts');
 const DATA_DIR = dirname(DATA_FILE);
 const ADMIN_HTML = join(__dirname, 'admin.html');
-const PORT = 3333;
+const PORT = Number(process.env.ADMIN_PORT) || 3333;
 
 // ─── Undo tracking ─────────────────────────────────────────
 const BACKUP_FILE = DATA_FILE + '.backup';
@@ -60,6 +60,29 @@ function json(res, status, data) {
 }
 
 // ─── Data Layer ─────────────────────────────────────────────
+
+/**
+ * Find the position of a PERSON DEFINITION (not a reference) in raw text.
+ * Looks for pattern: { id: "pXXX", name: (which only appears in person entries)
+ * Falls back to simple indexOf if pattern not found.
+ */
+function findPersonDefPos(raw, personId) {
+  // Pattern: `{ id: "pXXX", name:` or `{ id: "pXXX",\n` at start of person object
+  // We search for `id: "personId"` followed by `, name:` within ~50 chars
+  const needle = `id: "${personId}"`;
+  let pos = 0;
+  while (pos < raw.length) {
+    const found = raw.indexOf(needle, pos);
+    if (found === -1) return -1;
+    // Check if followed by ', name:' within next 3 chars (allowing whitespace)
+    const after = raw.substring(found + needle.length, found + needle.length + 20);
+    if (after.match(/^,\s*name:/)) {
+      return found;
+    }
+    pos = found + 1;
+  }
+  return -1;
+}
 
 function readRaw() {
   return readFileSync(DATA_FILE, 'utf-8');
@@ -208,8 +231,7 @@ function spouseToText(s) {
 /** Insert a new Spouse entry into a person's spouses array. */
 function mutateInsertSpouse(personId, spouse) {
   return (raw) => {
-    const needle = `id: "${personId}"`;
-    const pos = raw.indexOf(needle);
+    const pos = findPersonDefPos(raw, personId);
     if (pos === -1) throw new Error('Person ' + personId + ' not found');
     const tag = 'spouses: [';
     const spStart = raw.indexOf(tag, pos);
@@ -281,8 +303,7 @@ function mutateConvertExternalToLinked(personId, spouseId, linkedPersonId) {
 /** Rebuild a person's entire spouses array from parsed spouse objects. */
 function mutateRebuildPersonSpouses(personId, spouses) {
   return (raw) => {
-    const personNeedle = `id: "${personId}"`;
-    const personPos = raw.indexOf(personNeedle);
+    const personPos = findPersonDefPos(raw, personId);
     if (personPos === -1) throw new Error('Person not found');
     const spTag = 'spouses: [';
     const spStart = raw.indexOf(spTag, personPos);
@@ -303,12 +324,10 @@ function mutateRebuildPersonSpouses(personId, spouses) {
 /** Remove a person entry from the people array. */
 function mutateRemovePerson(personId) {
   return (raw) => {
-    const needle = `id: "${personId}"`;
-    const idPos = raw.indexOf(needle);
+    const idPos = findPersonDefPos(raw, personId);
     if (idPos === -1) throw new Error('Person not found: ' + personId);
 
-    // Verify this is a person entry (not a spouse) by checking context
-    // Person entries have gender field nearby, spouse entries don't always
+    // Find the opening brace of this person entry
     let braceStart = idPos;
     while (braceStart > 0 && raw[braceStart] !== '{') braceStart--;
 
@@ -391,8 +410,8 @@ function mutateRemoveSpouseEntry(personId, spouseId) {
     const remaining = person.spouses.filter(s => s.id !== spouseId);
 
     // Find the spouses array in raw text
-    const personNeedle = `id: "${personId}"`;
-    const personPos = raw.indexOf(personNeedle);
+    const personPos = findPersonDefPos(raw, personId);
+    if (personPos === -1) throw new Error('Person not found');
     const spTag = 'spouses: [';
     const spStart = raw.indexOf(spTag, personPos);
     if (spStart === -1) throw new Error('spouses not found');
@@ -483,6 +502,14 @@ function dedupeChildIds(ids) {
     seen.add(id);
     return true;
   });
+}
+
+/** Check that an ordered ID list is an exact permutation of the current IDs. */
+function isExactIdOrder(currentIds, orderedIds) {
+  if (!Array.isArray(orderedIds) || orderedIds.length !== currentIds.length) return false;
+  if (new Set(orderedIds).size !== orderedIds.length) return false;
+  const current = new Set(currentIds);
+  return orderedIds.every(id => typeof id === 'string' && current.has(id));
 }
 
 /** Find external spouses that match a person by name (for conversion detection). */
@@ -769,6 +796,99 @@ const server = createServer(async (req, res) => {
     if (url.pathname === '/api/undo-status' && req.method === 'GET') {
       const bp = getLatestBackup();
       return json(res, 200, { available: !!bp });
+    }
+
+    // ── POST /api/reorder-family ──
+    if (url.pathname === '/api/reorder-family' && req.method === 'POST') {
+      const b = await parseBody(req);
+      if (!b.personId) return json(res, 400, { error: 'الشخص مطلوب' });
+      if (!Array.isArray(b.spouseOrder)) {
+        return json(res, 400, { error: 'ترتيب الزوجات غير صالح' });
+      }
+      if (!Array.isArray(b.childrenOrderBySpouse)) {
+        return json(res, 400, { error: 'ترتيب الأبناء غير صالح' });
+      }
+
+      const data = readData();
+      const person = data.people.find(p => p.id === b.personId);
+      if (!person) return json(res, 400, { error: 'الشخص غير موجود' });
+
+      const currentSpouseIds = person.spouses.map(s => s.id);
+      if (!isExactIdOrder(currentSpouseIds, b.spouseOrder)) {
+        return json(res, 400, { error: 'يجب إرسال جميع الزيجات مرة واحدة دون حذف أو تكرار' });
+      }
+
+      const orderEntries = new Map();
+      for (const entry of b.childrenOrderBySpouse) {
+        if (!entry || typeof entry.spouseId !== 'string' || orderEntries.has(entry.spouseId)) {
+          return json(res, 400, { error: 'يوجد تكرار أو خطأ في بيانات إحدى الزيجات' });
+        }
+        orderEntries.set(entry.spouseId, entry);
+      }
+      if (orderEntries.size !== person.spouses.length) {
+        return json(res, 400, { error: 'يجب إرسال ترتيب الأبناء لكل الزيجات' });
+      }
+
+      const orderedSpousesById = new Map();
+      const reverseSyncMutations = [];
+
+      for (const spouse of person.spouses) {
+        const entry = orderEntries.get(spouse.id);
+        if (!entry || !Array.isArray(entry.sons) || !Array.isArray(entry.daughters)) {
+          return json(res, 400, { error: `ترتيب أبناء الزيجة "${spouse.label}" غير صالح` });
+        }
+
+        const children = spouse.childrenIds.map(childId => {
+          const child = data.people.find(p => p.id === childId);
+          return child ? { id: childId, gender: child.gender } : null;
+        });
+        if (children.some(child => child === null)) {
+          return json(res, 400, { error: `تحتوي الزيجة "${spouse.label}" على ابن غير موجود` });
+        }
+
+        const currentSons = children.filter(child => child.gender === 'male').map(child => child.id);
+        const currentDaughters = children.filter(child => child.gender === 'female').map(child => child.id);
+        if (!isExactIdOrder(currentSons, entry.sons)) {
+          return json(res, 400, { error: `قائمة الأبناء في الزيجة "${spouse.label}" ناقصة أو مكررة` });
+        }
+        if (!isExactIdOrder(currentDaughters, entry.daughters)) {
+          return json(res, 400, { error: `قائمة البنات في الزيجة "${spouse.label}" ناقصة أو مكررة` });
+        }
+
+        const normalizedChildrenIds = [...entry.sons, ...entry.daughters];
+        orderedSpousesById.set(spouse.id, {
+          ...spouse,
+          childrenIds: normalizedChildrenIds,
+        });
+
+        if (spouse.type === 'linked' && spouse.personId) {
+          const otherParent = data.people.find(p => p.id === spouse.personId);
+          const reverseSpouse = otherParent?.spouses.find(
+            s => s.type === 'linked' && s.personId === person.id,
+          );
+          if (reverseSpouse) {
+            reverseSyncMutations.push(
+              mutateSetSpouseChildrenIds(reverseSpouse.id, normalizedChildrenIds),
+            );
+          }
+        }
+      }
+
+      const orderedSpouses = b.spouseOrder.map(spouseId => orderedSpousesById.get(spouseId));
+      if (orderedSpouses.some(spouse => !spouse)) {
+        return json(res, 400, { error: 'تعذر تطبيق ترتيب الزيجات' });
+      }
+
+      safeOp(
+        mutateRebuildPersonSpouses(person.id, orderedSpouses),
+        ...reverseSyncMutations,
+      );
+
+      console.log(`  ↕ reorder-family: "${person.name}" (${person.id})`);
+      return json(res, 200, {
+        success: true,
+        message: `تم حفظ ترتيب أسرة "${person.name}" بنجاح`,
+      });
     }
 
     // ── POST /api/add-child ──
@@ -1201,8 +1321,7 @@ const server = createServer(async (req, res) => {
       console.log(`  ✏ edit-person: "${oldName}" → "${newName}" (${b.personId})`);
 
       safeOp((raw) => {
-        const needle = `id: "${b.personId}"`;
-        const pos = raw.indexOf(needle);
+        const pos = findPersonDefPos(raw, b.personId);
         if (pos === -1) throw new Error('Person not found');
 
         // Find name field within 200 chars after the id
@@ -1215,7 +1334,7 @@ const server = createServer(async (req, res) => {
 
         // Replace gender if changed
         if (newGender !== person.gender) {
-          const newPos = result.indexOf(`id: "${b.personId}"`);
+          const newPos = findPersonDefPos(result, b.personId);
           const gRegion = result.substring(newPos, newPos + 300);
           const gMatch = gRegion.match(/gender:\s*"/);
           if (gMatch) {

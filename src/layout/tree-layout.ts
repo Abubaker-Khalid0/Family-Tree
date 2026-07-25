@@ -120,6 +120,18 @@ function shiftPath(d: string, dx: number, _dy: number): string {
   });
 }
 
+/**
+ * Canonical family order: sons first, then daughters, preserving the stored
+ * oldest-to-youngest order inside each gender group.
+ */
+function getOrderedChildren(spouse: Spouse, dataAccess: DataAccess): Person[] {
+  const children = dataAccess.getSpouseChildren(spouse);
+  return [
+    ...children.filter(child => child.gender === 'male'),
+    ...children.filter(child => child.gender === 'female'),
+  ];
+}
+
 // === Layout Engine ===
 
 function layoutSubtree(
@@ -198,20 +210,24 @@ function layoutSubtree(
 
   // Check if any spouse has an expanded child — if so, focus on that spouse only
   const focusedSpouse = eligibleSpouses.find(sp => {
-    const children = dataAccess.getSpouseChildren(sp);
+    const children = getOrderedChildren(sp, dataAccess);
     return children.some(c => expanded.has(c.id));
   });
-  const visibleSpouses = focusedSpouse ? [focusedSpouse] : eligibleSpouses;
+  // Coordinates are placed left-to-right, so reverse the canonical array to
+  // make the first spouse appear at the far right in the RTL family tree.
+  const visibleSpouses = (focusedSpouse ? [focusedSpouse] : eligibleSpouses).slice().reverse();
 
   const blocks: Block[] = visibleSpouses
     .map((sp) => {
       // Treat as "no separate node" if unknown OR if it's the single known spouse (shown inline)
       const isUnknown = dataAccess.isSpouseNameUnknown(sp) || (singleKnownSpouse !== null && singleKnownSpouse !== undefined && sp.id === singleKnownSpouse.id);
-      const children = dataAccess.getSpouseChildren(sp);
+      const children = getOrderedChildren(sp, dataAccess);
 
       // Focus mode: if any child is expanded, show only that child
       const expandedChild = children.find(c => expanded.has(c.id));
-      const visibleChildren = expandedChild ? [expandedChild] : children;
+      // Lay out in reverse coordinate order so the canonical first child
+      // (oldest son, then oldest daughter) is read first from the right.
+      const visibleChildren = expandedChild ? [expandedChild] : children.slice().reverse();
 
       const childLayouts = visibleChildren.map((c) =>
         layoutSubtree(c, dataAccess, expanded, visited, childY, false),
