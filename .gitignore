@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# تصدير شجرة العائلة إلى draw.io — عمل محلي فقط، لا يُرفع
+drawio-export/
