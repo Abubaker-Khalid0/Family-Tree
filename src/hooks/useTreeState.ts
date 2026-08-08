@@ -38,6 +38,7 @@ export interface TreeState {
   expand: (personId: string) => void;
   collapse: (personId: string) => void;
   collapseAll: () => void;
+  expandAll: () => void;
   toggleNode: (personId: string) => void;
 }
 
@@ -75,6 +76,37 @@ export function useTreeState(dataAccess: DataAccess): TreeState {
   const collapseAll = useCallback(() => {
     setExpandedIds(new Set());
   }, []);
+
+  const expandAll = useCallback(() => {
+    // Collect all person IDs that have expandable branches
+    const all = new Set<string>();
+    const root = dataAccess.getRoot();
+    if (!root) return;
+
+    const queue: Person[] = [root];
+    const visited = new Set<string>();
+
+    while (queue.length > 0) {
+      const person = queue.shift()!;
+      if (visited.has(person.id)) continue;
+      visited.add(person.id);
+
+      if (dataAccess.personHasExpandableBranch(person)) {
+        all.add(person.id);
+      }
+
+      for (const spouse of person.spouses) {
+        for (const childId of spouse.childrenIds) {
+          const child = dataAccess.getPerson(childId);
+          if (child && !visited.has(child.id)) {
+            queue.push(child);
+          }
+        }
+      }
+    }
+
+    setExpandedIds(all);
+  }, [dataAccess]);
 
   const toggleNode = useCallback((personId: string) => {
     setExpandedIds(prev => {
@@ -284,6 +316,7 @@ export function useTreeState(dataAccess: DataAccess): TreeState {
     expand,
     collapse,
     collapseAll,
+    expandAll,
     toggleNode,
   };
 }

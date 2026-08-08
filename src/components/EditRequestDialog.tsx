@@ -3,7 +3,7 @@ import { X, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 // ─── رابط Formspree ───
-const FORMSPREE_URL = 'https://formspree.io/f/mzdnrkww';
+const FORMSPREE_URL = 'https://formspree.io/f/mdenagay';
 
 // ─── رقم واتساب (احتياطي — مجمّد حالياً) ───
 // const WHATSAPP_NUMBER = '971528986794';

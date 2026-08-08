@@ -1702,6 +1702,16 @@
       const n = norm(query);
       const compact = n.replace(/\s/g, '');
 
+      // البحث بالـ ID مباشرة (مثل p008 أو s204)
+      const trimmed = query.trim().toLowerCase();
+      if (/^[ps]\d+$/.test(trimmed)) {
+        const found = allPeople.filter(p => p.id.toLowerCase() === trimmed);
+        if (found.length > 0) return found;
+        // بحث جزئي بالـ ID
+        const partial = allPeople.filter(p => p.id.toLowerCase().includes(trimmed));
+        if (partial.length > 0) return partial.slice(0, 30);
+      }
+
       const scored = [];
       for (const p of allPeople) {
         const pn = norm(p.name);
